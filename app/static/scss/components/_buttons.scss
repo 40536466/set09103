@@ -1,0 +1,82 @@
+
+/* BUTTONS
+--------------------------------------------*/
+
+// Core button code to be used in all button types.
+// Mixin created to allow for use of '@include button' instead of '@extend .button'.
+@mixin button {
+  display: inline-block;
+  padding: 0.7rem 3rem 0.6rem 3rem;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: transparent;
+  color: $black;
+  border-radius: $border-radius-default;
+  border: 2px solid $black;
+  cursor: pointer;
+  @include transition;
+}
+
+
+.button--primary {
+  @include button;
+  color: $white;
+  background-color: $color-primary;
+  border-color: $color-primary;
+
+  &:hover,
+  &:focus {
+    background-color: $color-primary-hover;
+  border-color: $color-primary-hover;
+    outline: 0;
+  }
+}
+
+
+.button--positive {
+  @include button;
+  &:hover,
+  &:focus {
+    color: $color-primary;
+    border-color: $color-primary;
+    outline: 0;
+  }
+}
+
+
+.button--negative {
+  @include button;
+  &:hover,
+  &:focus {
+    color: $color-warning;
+    border-color: $color-warning;
+    outline: 0;
+  }
+}
+
+
+// Replaces button with text in primary color
+.button--success-text {
+  display: inline-block;
+  padding: 0.7rem 3rem 0.6rem 3rem;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.1rem;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: transparent;
+  color: $color-primary;
+}
+
+
+// To be added in addition to one of the other button classes
+.button--large {
+  font-size: 1.4rem;
+  padding: 1.2rem 4.4rem 1.1rem 4.4rem;
+}

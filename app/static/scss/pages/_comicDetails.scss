@@ -1,0 +1,129 @@
+
+/* COMIC DETAILS
+--------------------------------------------*/
+
+.comic-details {
+  width: 100%;
+  padding-top: 8rem;
+
+
+  &__container { @include display-flex($justify: flex-start, $align: flex-start); }
+
+
+  &__column {
+    &--narrow {
+      @include display-flex($direction: column, $justify: flex-start);
+      min-width: 30rem;
+    }
+    &--wide {
+      @include display-flex($direction: column, $justify: flex-start, $align: flex-start);
+      flex: auto;
+      padding: 0 4rem;
+    }
+  }
+
+
+  &__img { width: 100%; }
+
+
+  &__author {
+    margin-top: 0.6rem;
+    opacity: 0.6;
+  }
+
+  &__price { color: $color-primary; }
+
+
+  &__dividing-line {
+    width: 100%;
+    border: 1px solid $medium-grey;
+    margin: 3rem 0;
+  }
+
+
+  &__additional-info {
+    margin-top: 3rem;
+    font-style: italic;
+  }
+
+
+  &__button { margin: 4rem 1rem 0 0; }
+
+
+  &__categories-list {
+    width: 100%;
+    max-height: 42rem;
+    overflow-y: scroll;
+  }
+
+
+  &__category-item {
+    @include display-flex($justify: space-between);
+    height: 5.2rem;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 1rem;
+    font-weight: 600;
+    border-bottom: 2px dotted $medium-grey;
+    cursor: pointer;
+    text-decoration: none;
+    @include transition;
+
+    &:hover {
+      color: $color-primary;
+      padding: 0 0.8rem;
+    }
+  }
+}
+
+
+
+
+
+/* MEDIA QUERIES
+--------------------------------------------*/
+@media only screen and (max-width: 1440px) {
+  .comic-details__column--narrow { min-width: 26rem; }
+}
+
+
+@media only screen and (max-width: 1280px) {
+  .comic-details__column--narrow { min-width: 22rem; }
+  .comic-details__column--wide { padding: 0 2rem; }
+}
+
+
+@media only screen and (max-width: 1024px) {
+  .comic-details {
+    &__container {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &__column--narrow { min-width: 100%; }
+    &__column--wide { margin-bottom: 8rem; }
+
+
+    &__img {
+      max-width: 30rem;
+      margin-bottom: 6rem;
+    }
+
+
+    &__categories-list {
+      max-height: none;
+      overflow-y: none;
+    }
+
+
+    &__instructions { width: 100%; }
+  }
+}
+
+
+@media only screen and (max-width: 600px) {
+  .comic-details {
+    &__button-wrapper,
+    &__button { width: 100%; }
+  }
+}

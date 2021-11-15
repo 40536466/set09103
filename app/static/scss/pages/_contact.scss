@@ -1,0 +1,83 @@
+
+/* CONTACT
+--------------------------------------------*/
+
+.contact {
+  width: 100%;
+  padding: 8rem 0;
+
+
+  &__container { @include display-flex($align: flex-start); }
+
+
+  &__column {
+    &--narrow {
+      @include display-flex($direction: column, $justify: flex-start, $align: flex-start);
+      flex: 1;
+    }
+    &--wide {
+      @include display-flex($direction: column, $justify: flex-start, $align: flex-start);
+      flex: 2;
+      margin-right: 8rem;
+    }
+  }
+
+
+  &__heading { margin-bottom: 3rem; }
+
+
+  &__text { margin-bottom: 5rem; }
+
+
+  &__success {
+    @include display-flex;
+    align-self: center;
+    color: $color-primary;
+    margin-bottom: 3rem;
+    font-size: 1.8rem;
+  }
+
+
+  &__icon-wrapper {
+    @include display-flex;
+    margin-bottom: 3rem;
+  }
+
+
+  &__icon {
+    font-size: 3rem;
+    width: 3rem;
+    margin-right: 3rem;
+  }
+
+
+  &__icon-text { padding-top: 0.4rem; }
+}
+
+
+
+
+
+/* MEDIA QUERIES
+--------------------------------------------*/
+@media only screen and (max-width: 1024px) {
+  .contact__column--wide { margin-right: 4rem; }
+}
+
+@media only screen and (max-width: 900px) {
+  .contact {
+    &__container { flex-direction: column; }
+
+    &__column--wide { margin-right: 0; }
+
+    &__form { margin-bottom: 8rem; }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .contact {
+    &__heading { align-self: center; }
+
+    &__text { text-align: center; }
+  }
+}

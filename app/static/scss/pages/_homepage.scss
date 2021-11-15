@@ -1,0 +1,155 @@
+
+/* HOMEPAGE
+--------------------------------------------*/
+
+// HERO SCREEN
+.hero {
+  height: 65%; // same as bg-overlay height
+  width: 100%;
+  background-image: url("../images/hero.jpg");
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.4);
+
+  &__container { @include display-flex($justify: flex-start); }
+
+  &__bg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 65%; // same as .hero height
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  &__titles { z-index: 100; }
+
+  &__h1 {
+    font-size: 6rem;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 3rem;
+    color: $white;
+    & span {
+      font-family: Caveat;
+      font-size: 8rem;
+    }
+  }
+
+  &__link {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-left: 1rem;
+    color: $white;
+  }
+}
+
+
+
+// FEATURED TITLES
+.featured {
+  width: 100%;
+  padding: 8rem 0;
+  text-align: center;
+
+  &__container { @include display-flex($direction: column); }
+
+  &__titles { max-width: 65rem; }
+
+  &__heading { margin-bottom: 2rem; }
+
+  // This ensures featured titles only take up one row as screensize decreases
+  &__book-grid {
+    max-height: 54rem;
+    overflow-y: hidden;
+  }
+}
+
+
+
+// REGISTRATION PROMPT
+.reg-prompt {
+  width: 100%;
+  height: 52rem;
+  text-align: center;
+  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("../images/registration-prompt.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-shadow: -5px -5px 15px rgba(0, 0, 0, 0.4);
+
+  &__container { @include display-flex($justify: flex-end); }
+
+  &__content { max-width: 65rem; }
+
+  &__heading {
+    margin-bottom: 2rem;
+    color: $white;
+  }
+
+  &__description {
+    margin-bottom: 6rem;
+    color: $white;
+  }
+}
+
+
+
+
+
+/* MEDIA QUERIES (HERO SCREEN)
+--------------------------------------------*/
+@media only screen and (max-width: 1024px) {
+  .hero__h1 { font-size: 5rem; }
+}
+
+@media only screen and (max-width: 768px) {
+  .hero__h1 { font-size: 4rem; }
+  .hero__container { @include display-flex($justify: center); }
+}
+
+@media only screen and (max-width: 450px) {
+  .hero { background-position: 10% 0%; }
+}
+
+@media only screen and (max-height: 1000px) {
+  .hero,
+  .hero__bg-overlay {
+    height: 100%;
+  }
+}
+
+
+
+/* MEDIA QUERIES (FEATURED TITLES)
+--------------------------------------------*/
+@media only screen and (max-width: 1280px) {
+  // Reduces number of featured titles displayed on smaller screens
+  .featured__book-grid { max-height: 52rem; }
+}
+
+@media only screen and (max-width: 706px) {
+  // Reduces number of featured titles displayed on smaller screens
+  .featured__book-grid { max-height: 98rem; }
+}
+
+@media only screen and (max-width: 470px) {
+  // Reduces number of featured titles displayed on smaller screens
+  .featured__book-grid { max-height: 148rem; }
+}
+
+
+
+/* MEDIA QUERIES (REGISTRATION PROMPT)
+--------------------------------------------*/
+@media only screen and (max-width: 1024px) {
+  .reg-prompt { background-position: right bottom; }
+}
+
+@media only screen and (max-width: 850px) {
+  .reg-prompt {
+    background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("../img/registration-prompt-mobile.jpg");
+    &__container { justify-content: center; }
+  }
+}

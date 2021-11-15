@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- METAS & TITLE
+  --------------------------------------------------------->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Tim Harvey">
+  <meta name="description" content="A dynamic comic book collection app, created for my third year Web Development degree course.">
+  <title>{% block title %}{% endblock %}</title>
+
+  <!-- CSS
+  --------------------------------------------------------->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+  <!-- FONTS
+  --------------------------------------------------------->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet">
+
+  <!-- FONT AWESOME
+  --------------------------------------------------------->
+  <script src="https://kit.fontawesome.com/e9d2f03cce.js" crossorigin="anonymous"></script>
+
+  <!-- FAVICON
+  --------------------------------------------------------->
+  <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png">
+  <link rel="manifest" href="img/favicon/site.webmanifest">
+
+</head>
+<body id="top">
+
+  <!-- MAIN CONTENT
+  --------------------------------------------------------->
+
+  <!-- Navigation
+  ------------------------------------->
+  <nav class="nav">
+    <div class="nav__container">
+
+      <!-- Logo -->
+      <div class="nav__logo">
+        <img src="{{ url_for('static', filename='images/logo-white.png') }}" alt="Comicall Logo">
+      </div>
+
+      <!-- Nav Links -->
+      <ul class="nav__list">
+        <li class="nav__item"><a href="/" class="nav__link">Home</a></li>
+        <li class="nav__item"><a href="/comics" class="nav__link">Comics</a></li>
+        <li class="nav__item"><a href="/contact" class="nav__link">Contact</a></li>
+        <!-- Show link to collection when user logged in -->
+        <!-- if (isset($_SESSION['currentUser'])) { echo '<li class="nav__item"><a href="/collection" class="nav__link">My Collection</a></li>'; } -->
+      </ul>
+
+      <!-- Account Icon -->
+      <ul class="nav__icons">
+        <li class="nav__item"><a class="nav__icon userIcon" onclick="toggleDropdownMenu()" aria-label="User icon"><i class="fas fa-user-circle"></i></a></li>
+        <!-- Account Dropdown (contents shown dynamically) -->
+        <li>
+          <ul class="nav__dropdown">
+            <!-- if (isset($_SESSION['currentUser'])) {
+              // If user logged in ...
+              echo "<li class='nav__dropdown-item'><a class='nav__dropdown-link username'><strong>$_SESSION[currentUser]</strong></a></li>";
+              echo '<li class="hr"></li>';
+              echo '<li class="nav__dropdown-item"><a href="/collection" class="nav__dropdown-link">My Collection</a></li>';
+              echo '<li class="nav__dropdown-item"><a href="/logout" class="nav__dropdown-link warning">Logout</a></li>';
+            }
+            else {
+              // If no user logged in ...
+              echo '<li class="nav__dropdown-item"><a href="/login_register?section=login" class="nav__dropdown-link">Login</a></li>';
+              echo '<li class="nav__dropdown-item"><a href="/login_register?section=register" class="nav__dropdown-link">Create an Account</a></li>';
+              echo '<li class="hr"></li>';
+              echo '<li class="nav__dropdown-item"><a class="nav__dropdown-link disabled">My Collection</a></li>';
+            } -->
+          </ul>
+        </li>
+      </ul>
+
+      <!-- Burger Menu (mobile only) -->
+      <div class="nav__burger" onclick="toggleBurgerMenu()"><span class="fas fa-bars"></span></div>
+
+    </div>
+  </nav>
+
+
+
+
+  <!-- Page Content
+  ------------------------------------->
+  {% block content %}
+  {% endblock %}
+
+
+
+
+
+  <!-- Footer
+  ------------------------------------->
+  <section class="footer">
+    <div class="footer__container container">
+
+      <!-- Logo -->
+      <div class="footer__logo">
+        <img src="{{ url_for('static', filename='images/logo-white.png') }}" alt="Comicall Logo">
+      </div>
+
+      <!-- Nav Links -->
+      <ul class="footer__list">
+        <li class="footer__item"><a href="/" class="footer__link">Home</a></li>
+        <li class="footer__item"><a href="/comics" class="footer__link">Comics</a></li>
+        <li class="footer__item"><a href="/contact" class="footer__link">Contact</a></li>
+        <!-- Show link to collection when user logged in -->
+        <!-- if (isset($_SESSION['currentUser'])) { echo '<li class="footer__item"><a href="/collection" class="footer__link">My Collection</a></li>'; } -->
+      </ul>
+
+    </div>
+
+    <!-- Copyright & Social -->
+    <div class="footer__bottom-wrapper container">
+      <p class="footer__copyright-text">&copy; 2021 Comicall. All Rights Reserved.</p>
+      <!-- Social Media -->
+      <div class="footer__social">
+        <a class="footer__icon facebook"><i class="fab fa-facebook-f"></i></a>
+        <a class="footer__icon twitter"><i class="fab fa-twitter"></i></a>
+        <a class="footer__icon youtube"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+  <!-- Success alert - shown on successful registration -->
+  <!--
+
+  if (isset($_SESSION['registrationSuccess']) && $_SESSION['registrationSuccess'] == true) {
+    echo '<script>alert("Registration successful!\nYou are now logged in.");</script>';
+    unset($_SESSION['registrationSuccess']);
+  }
+
+  -->
+
+
+
+
+
+  <!-- JAVASCRIPT
+  --------------------------------------------------------->
+  <script type='text/javascript' src="{{ url_for('static', filename='js/navDropdown.js') }}"></script>
+  <script type='text/javascript' src="{{ url_for('static', filename='js/navScrollBackground.js') }}"></script>
+  <script type='text/javascript' src="{{ url_for('static', filename='js/burgerMenu.js') }}"></script>
+
+
+  <!-- END DOCUMENT
+  --------------------------------------------------------->
+
+</body>
+</html>

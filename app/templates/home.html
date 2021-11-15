@@ -1,0 +1,121 @@
+<!--
+
+session_start();
+
+
+// Connection
+include 'connection.php';
+
+
+// Stores current URL minus arguments
+$_SESSION['redirect'] = strtok($_SERVER['REQUEST_URI'], '?');
+
+-->
+
+
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+
+  <!-- Hero Screen
+  ------------------------------------->
+  <section class="hero">
+    <div class="hero__container container">
+
+      <!-- Hero BG Image Overlay-->
+      <div class="hero__bg-overlay"></div>
+
+      <!-- Hero Titles -->
+      <div class="hero__titles">
+        <h1 class="hero__h1">Welcome to<br><span>Comicall</span></h1>
+        <a class="hero__link" href="/comics">Browse comics</a>
+      </div>
+
+    </div>
+  </section>
+
+
+
+
+
+  <!-- Featured Titles
+  ------------------------------------->
+  <section class="featured">
+    <div class="featured__container container">
+
+      <!-- Heading -->
+      <div class="featured__titles">
+        <h2 class="featured__heading">Featured Titles</h2>
+        <p class="featured__description">Looking for something new? Check out some of our top picks for this month.</p>
+      </div>
+
+
+      <!-- Book Grid -->
+      <div class="featured__book-grid book-grid">
+
+
+        <!-- Individual book tiles created dynamically -->
+        <!--
+
+          // Get featured books from DB
+          $query = mysqli_query($connection, "SELECT * FROM books WHERE featured='featured' ORDER BY author");
+
+          // Create book tiles for each title found
+          while ($row = mysqli_fetch_array($query)) {
+            extract($row);
+
+            // Replace space in author name with underscore for use in URL
+            $authorURL = str_replace(" ", "_", $author);
+
+        -->
+
+        <!-- Book Grid Item --><!-- SET $ID & COVER IMAGE & ALT TEXT & TITLE & AUTHOR & AUTHOR URL-->
+        <div class="book-grid__item">
+          <a href="/comic_details?id=$ID" class="book-grid__link">
+            <img class="book-grid__img" src="{{ url_for('static', filename='images/uploads/the-martian.jpg') }}" alt="$title">
+            <h4 class="book-grid__title">$title</h4>
+          </a>
+          <div class="book-grid__flex-wrapper">
+            <a href="/comics?author=$authorURL" class="book-grid__link">
+              <h5 class="book-grid__author">$author</h5>
+            <a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+
+
+
+  <!-- Registration Prompt
+  ------------------------------------->
+  <section class="reg-prompt">
+    <div class="reg-prompt__container container">
+
+      <!-- Content -->
+      <div class="reg-prompt__content">
+        <h2 class="reg-prompt__heading">Become A Member Today</h2>
+        <p class="reg-prompt__description">Start your own personal library and keep track of all the comics in your collection. Simply register to become a member (it's free!) and start adding comics today!</p>
+        <a href="/login_register?section=register" class="reg-prompt__button button--primary button--large">Register</a>
+      </div>
+
+    </div>
+  </section>
+
+
+
+
+
+  <!-- Back to Top Button
+  ------------------------------------->
+  <a href="#top" class="back-to-top-button" aria-label="Back to top button"><i class="fas fa-chevron-up back-to-top-button__arrow"></i></a>
+
+
+{% endblock %}
