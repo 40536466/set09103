@@ -74,7 +74,7 @@ $_SESSION['redirect'] = strtok($_SERVER['REQUEST_URI'], '?');
 
         <!-- Book Grid Item --><!-- SET $ID & COVER IMAGE & ALT TEXT & TITLE & AUTHOR & AUTHOR URL-->
         <div class="book-grid__item">
-          <a href="/comic_details?id=$ID" class="book-grid__link">
+          <a href="/comic-details?id=$ID" class="book-grid__link">
             <img class="book-grid__img" src="{{ url_for('static', filename='images/uploads/the-martian.jpg') }}" alt="$title">
             <h4 class="book-grid__title">$title</h4>
           </a>

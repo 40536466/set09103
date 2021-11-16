@@ -1,0 +1,255 @@
+<!--
+
+session_start();
+
+
+// Connection
+include 'connection.php';
+
+
+// Stores current URL minus arguments
+$_SESSION['redirect'] = strtok($_SERVER['REQUEST_URI'], '?');
+
+
+// Declare search term and category variables
+$searchTerm = '';
+$category = '';
+
+
+// Store search term from search bar, if set
+if (isset($_POST['search'])) {
+  // Replace apostrophe in string to avoid SQL errors
+  $searchTerm = str_replace("'", "&#39;", $_POST['searchTerm']);
+}
+
+
+// Store author's name, if set (will overwrite searchTerm above) -> convert underscores to spaces
+if (isset($_GET['author'])) {
+  $searchTerm = str_replace("_", " ", $_GET['author']);
+}
+
+
+// Store selected category, if set -> convert underscores to spaces
+if (isset($_GET['category'])) {
+  $category = str_replace("_", " ", $_GET['category']);
+
+  // Special case for 'Food & Drink' -> add ampersand back into string
+  if ($category === 'Food Drink') { $category = 'Food & Drink'; }
+}
+
+-->
+
+
+{% extends 'base.html' %}
+
+{% block title %}Comics{% endblock %}
+
+{% block content %}
+
+
+  <!-- Page Banner
+  ------------------------------------->
+  <div class="page-banner">
+    <!-- Page Banner BG Image Overlay -->
+    <div class="page-banner__bg-overlay"></div>
+
+    <!-- Page Banner Title -->
+    <!-- Title changes dynamically based on category selected by user -->
+    <!--
+
+      // If category is set, set heading equal to category
+      if ($category != '') {
+        echo "<h1 class='page-banner__title'>$category</h1>";
+      }
+      // If category is not set, set heading equal to 'All Books'
+      elseif ($category == '') {
+        echo "<h1 class='page-banner__title'>All Books</h1>";
+      }
+
+    -->
+
+    <h1 class="page-banner__title">All Books</h1>
+  </div>
+  
+  
+  
+  
+
+  <!-- Page Content
+  ------------------------------------->
+  <section class="comics">
+    <div class="comics__container container">
+
+      <!-- Categories Heading -->
+      <div class="comics__column--narrow">
+        <h3 class="comics__sidebar-heading">Categories</h3>
+      </div>
+
+
+      <!-- Search Bar -->
+      <div class="comics__column--wide">
+
+        <!-- Search bar component -->
+        <form class="comics__search-bar search-bar" action="/comics" method="POST">
+
+          <label aria-label="Search title or author ..."><input type="text" name="searchTerm" class="search-bar__input" id="searchbox" placeholder="Search title or author ..."></label>
+
+          <!-- Search button for large devices -->
+          <button type="submit" name="search" class="search-bar__button button--positive"><i class="fas fa-search"></i> Search</button>
+
+          <!-- Search button for phones -->
+          <button type="submit" name="search" class="search-bar__button--mobile button--primary"><i class="fas fa-search"></i></button>
+        </form>
+      </div>
+    </div>
+
+
+    <!-- Dividing Line -->
+    <div class="comics__container container">
+      <hr class="comics__dividing-line">
+    </div>
+
+
+    <!-- Sidebar & Book Grid -->
+    <div class="comics__container--align-top container">
+
+      <!-- Categories Sidebar --><!-- MAYBE CREATE ARRAY OF CATEGORIES TO THEN CREATE THIS SECTION DYNAMICALLY -->
+      <div class="comics__column--narrow">
+        <div class="comics__categories-list">
+          <!-- Category Item -->
+          <a href="/comics" class="comics__category-item"> 
+            <p class="comics__category-name">All Comics</p>
+            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books")) -->
+            <p class="comics__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <a href="/comics?category=Adventure" class="comics__category-item">
+            <p class="comics__category-name">Adventure</p>
+            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Adventure'")) -->
+            <p class="comics__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <a href="/comics?category=Animals" class="comics__category-item">
+            <p class="comics__category-name">Animals</p>
+            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Animals'")) -->
+            <p class="comics__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <a href="/comics?category=Art" class="comics__category-item">
+            <p class="comics__category-name">Art</p>
+            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Art'")) -->
+            <p class="comics__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <a href="/comics?category=Biographies" class="comics__category-item">
+            <p class="comics__category-name">Biographies</p>
+            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Biographies'")) -->
+            <p class="comics__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <a href="/comics?category=Business" class="comics__category-item">
+            <p class="comics__category-name">Business</p>
+            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Business'")) -->
+            <p class="comics__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <!-- Categories with apostrophies should have the apostrophies removed before being used to search the DB, hence '?category=Childrens' in href -->
+          <a href="/comics?category=Childrens" class="comics__category-item">
+            <p class="comics__category-name">Children's</p>
+            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Childrens'")) -->
+            <p class="comics__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <a href="/comics?category=Classics" class="comics__category-item">
+            <p class="comics__category-name">Classics</p>
+            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Classics'")) -->
+            <p class="comics__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <a href="/comics?category=Crime" class="comics__category-item">
+            <p class="comics__category-name">Crime</p>
+            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Crime'")) -->
+            <p class="comics__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <a href="/comics?category=Computing" class="comics__category-item">
+            <p class="comics__category-name">Computing</p>
+            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Computing'")) -->
+            <p class="comics__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <a href="/comics?category=Education" class="comics__category-item">
+            <p class="comics__category-name">Education</p>
+            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Education'")) -->
+            <p class="comics__category-number">($#)</p>
+          </a>
+        </div>
+      </div>
+
+
+      <!-- Book Grid -->
+      <div class="comics__column--wide">
+        <div class="comics__book-grid book-grid">
+
+          <!-- Individual comics created dynamically -->
+          <!--
+
+            // If search term is not set, fetch all comics
+            if ($searchTerm == '') {
+              $query = mysqli_query($connection, "SELECT * FROM books ORDER BY author");
+            }
+            // If search term is set, fetch only relevant comics
+            elseif ($searchTerm != '') {
+              $query = mysqli_query($connection, "SELECT * FROM books WHERE title LIKE '%$searchTerm%' OR author LIKE '%$searchTerm%' ORDER BY author");
+            }
+
+
+            // If category is set, fetch only comics from that category
+            if ($category != '') {
+              $query = mysqli_query($connection, "SELECT * FROM books WHERE category='$category' ORDER BY author");
+            }
+
+
+            // Echo apology if no comics found
+            if (mysqli_num_rows($query) == 0) {
+              echo "<p class='book-grid__no-results'>No comics found - please check back again soon.</p>";
+            }
+
+
+            // Create comic tiles for each title found
+            while ($row = mysqli_fetch_array($query)) {
+              extract($row);
+
+              // Replace space in author name with underscore for use in URL
+              $authorURL = str_replace(" ", "_", $author);
+
+          -->
+
+          <!-- Book Grid Item --><!-- SET $ID & COVER IMAGE & ALT TEXT & TITLE & AUTHOR & AUTHOR URL-->
+          <div class="book-grid__item">
+            <a href="/comic-details?id=$ID" class="book-grid__link">
+              <img class="book-grid__img" src="{{ url_for('static', filename='images/uploads/the-martian.jpg') }}" alt="$title">
+              <h4 class="book-grid__title">$title</h4>
+            </a>
+            <div class="book-grid__flex-wrapper">
+              <a href="/comics?author=$authorURL" class="book-grid__link">
+                <h5 class="book-grid__author">$author</h5>
+              </a>
+            </div>
+          </div>
+        
+        </div>
+      </div>
+    </div>
+  </section>
+  
+
+
+
+
+  <!-- Back to Top Button
+  ------------------------------------->
+  <a href="#top" class="back-to-top-button" aria-label="Back to top button"><i class="fas fa-chevron-up back-to-top-button__arrow"></i></a>
+
+
+{% endblock %}

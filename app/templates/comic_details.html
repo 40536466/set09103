@@ -1,0 +1,257 @@
+<!--
+
+session_start();
+
+
+// Connection
+include 'connection.php';
+
+// Fetch collection contents
+include 'fetch_collection.php';
+
+
+// If user tries to access page without comic ID in URL, redirect to index.php
+if (!isset($_GET['id'])) {
+  echo '<script type="text/javascript">'; 
+  echo 'alert("This page cannot be accessed from here.");';
+  echo 'window.location.href = "/";';
+ echo '</script>';
+}
+
+
+// Stores current URL minus arguments
+$_SESSION['redirect'] = strtok($_SERVER['REQUEST_URI'], '?');
+
+
+// ADD TO COLLECTION
+// Append current comic ID to collectionContents array when 'Add to Collection' button clicked
+// Note - 'Add to Collection' button only clickable by logged-in users
+if (isset($_POST['addToCollection'])) {
+  $_SESSION['collectionContents'][] = $_GET['id'];
+
+  // Serialize collectionContents array and store in DB
+  $contents = serialize($_SESSION['collectionContents']);
+  mysqli_query($connection, "UPDATE users SET collection='$contents' WHERE username='$_SESSION[currentUser]'");
+
+}
+
+-->
+
+
+{% extends 'base.html' %}
+
+{% block title %}Comic Details{% endblock %}
+
+{% block content %}
+
+
+  <!-- Page Banner
+  ------------------------------------->
+  <div class="page-banner">
+    <!-- Page Banner BG Image Overlay -->
+    <div class="page-banner__bg-overlay"></div>
+
+    <!-- Page Banner Title -->
+    <!-- Title changes dynamically based on comic author -->
+    <!--
+
+      // Get author name from DB and store in $result
+      $query = mysqli_query($connection, "SELECT author FROM books WHERE ID='$_GET[id]'");
+      $result = mysqli_fetch_array($query);
+
+    -->
+
+    <h1 class="page-banner__title">$result[author]</h1>
+  </div>
+
+
+
+
+
+  <!-- Page Content
+  ------------------------------------->
+  <section class="comic-details">
+    <div class="comic-details__container container">
+
+      <!--
+
+      // Get comic details from DB and extract to variables
+      $query = mysqli_query($connection, "SELECT * FROM books WHERE ID='$_GET[id]'");
+      $result = mysqli_fetch_array($query);
+      extract($result);
+
+      -->
+
+      <!-- Comic Image --><!-- SET $ID & COVER IMAGE & ALT TEXT & TITLE & AUTHOR & AUTHOR URL-->
+      <div class="comic-details__column--narrow">
+        <img class="comic-details__img" src="{{ url_for('static', filename='images/uploads/the-martian.jpg') }}" alt="$title">
+      </div>
+
+
+      <!-- Text Content -->
+      <div class="comic-details__column--wide">
+
+        <!-- Comic Title -->
+        <h3 class="comic-details__heading">$title</h3>
+
+        <!-- Author -->
+        <h5 class="comic-details__author">$author</h5>
+
+        <!-- Dividing Line -->
+        <hr class="comic-details__dividing-line">
+
+        <!-- Comic Summary -->
+        <p class="comic-details__summary">$summary</p>
+
+        <!-- Additional Info -->
+        <p class="comic-details__additional-info">$additional_info</p>
+
+
+        <!-- Buttons (created created dynamically) -->
+        <form class="comic-details__button-wrapper" action="/comic_details?id=$_GET[id]" method="POST">
+
+          <!--
+
+          // ADD TO COLLECTION - feature only available to logged-in users
+          // If comic ID is already in collectionContents array, display 'Added to collection' text and disable 'Add to Collection' button
+          if (isset($_SESSION['collectionContents']) && in_array($_GET['id'], $_SESSION['collectionContents'])) {
+            echo '<p class="comic-details__button button--success-text button--large">Added to your collection</p>';
+          }
+          // If comic ID is NOT in collectionContents array but user is logged in, display 'Add to Collection' button
+          elseif (isset($_SESSION['currentUser'])) {
+            echo '<button name="addToCollection" type="submit" class="comic-details__button button--positive button--large">Add to Collection</button>';
+          }
+
+          -->
+          
+        </form>
+      </div>
+
+
+      <!-- Categories Sidebar -->
+      <div class="comic-details__column--narrow">
+
+        <!-- Categories Heading -->
+        <h3 class="comic-details__heading">Categories</h3>
+
+        <!-- Dividing Line -->
+        <hr class="comic-details__dividing-line">
+
+        <!-- Categories List -->
+        <div class="comic-details__categories-list">
+
+          <!-- Category Item -->
+          <a href="/comics" class="comic-details__category-item"> 
+            <p class="comic-details-details__category-name">All Titles</p>
+            <!-- $numberOfTitles = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books")) -->
+            <p class="comic-details__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <a href="/comics?category=Adventure" class="comic-details__category-item">
+            <p class="comic-details__category-name">Adventure</p>
+            <!-- $numberOfTitles = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Adventure'")) -->
+            <p class="comic-details__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <a href="/comics?category=Animals" class="comic-details__category-item">
+            <p class="comic-details__category-name">Animals</p>
+            <!-- $numberOfTitles = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Animals'")) -->
+            <p class="comic-details__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <a href="/comics?category=Art" class="comic-details__category-item">
+            <p class="comic-details__category-name">Art</p>
+            <!-- $numberOfTitles = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Art'")) -->
+            <p class="comic-details__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <a href="/comics?category=Biographies" class="comic-details__category-item">
+            <p class="comic-details__category-name">Biographies</p>
+            <!-- $numberOfTitles = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Biographies'")) -->
+            <p class="comic-details__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <a href="/comics?category=Business" class="comic-details__category-item">
+            <p class="comic-details__category-name">Business</p>
+            <!-- $numberOfTitles = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Business'")) -->
+            <p class="comic-details__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <!-- Categories with apostrophies should have the apostrophies removed before being used to search the DB, hence '?category=Childrens' in href -->
+          <a href="/comics?category=Childrens" class="comic-details__category-item">
+            <p class="comic-details__category-name">Children's</p>
+            <!-- $numberOfTitles = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Childrens'")) -->
+            <p class="comic-details__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <a href="/comics?category=Classics" class="comic-details__category-item">
+            <p class="comic-details__category-name">Classics</p>
+            <!-- $numberOfTitles = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Classics'")) -->
+            <p class="comic-details__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <a href="/comics?category=Crime" class="comic-details__category-item">
+            <p class="comic-details__category-name">Crime</p>
+            <!-- $numberOfTitles = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Crime'")) -->
+            <p class="comic-details__category-number">($#)</p>
+          </a>
+          <!-- Category Item -->
+          <a href="/comics?category=Computing" class="comic-details__category-item">
+            <p class="comic-details__category-name">Computing</p>
+            <!-- $numberOfTitles = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Computing'")) -->
+            <p class="comic-details__category-number">($#)</p>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+
+
+
+
+  <!-- Featured Titles (for styles, see _homepage.scss)
+  ------------------------------------->
+  <section class="featured">
+    <div class="featured__container container">
+
+      <!-- Heading -->
+      <div class="featured__titles">
+        <h2 class="featured__heading">More from This Author</h2>
+      </div>
+
+      <!-- Book Grid -->
+      <div class="featured__book-grid book-grid">
+
+        <!-- Individual book tiles created dynamically -->
+        <!--
+
+          // Get featured books from DB
+          $query = mysqli_query($connection, "SELECT * FROM books WHERE author='$result[author]' ORDER BY title");
+
+          // Create book tiles for each title found
+          while ($row = mysqli_fetch_array($query)) {
+            extract($row);
+
+            // Replace space in author name with underscore for use in URL
+            $authorURL = str_replace(" ", "_", $author);
+
+        -->
+
+        <!-- SET $ID & COVER IMAGE & ALT TEXT & TITLE & AUTHOR & AUTHOR URL-->
+        <!-- Book Grid Item -->
+        <div class="book-grid__item">
+          <a href="/comic_details?id=$ID" class="book-grid__link">
+            <img class="book-grid__img" src="{{ url_for('static', filename='images/uploads/the-martian.jpg') }}" alt="$title">
+            <h4 class="book-grid__title">$title</h4>
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+{% endblock %}

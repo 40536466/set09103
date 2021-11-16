@@ -1,0 +1,139 @@
+<!--
+
+session_start();
+
+
+// Connection
+include 'connection.php';
+
+// Fetch collection contents
+include 'fetch_collection.php';
+
+
+// If user tries to access page without logging in, redirect to home.html
+if (!isset($_SESSION['currentUser'])) {
+  echo '<script type="text/javascript">'; 
+  echo 'alert("You must be logged in to view this page.");';
+  echo 'window.location.href = "/";';
+  echo '</script>';
+}
+
+
+// Stores current URL minus arguments
+$_SESSION['redirect'] = strtok($_SERVER['REQUEST_URI'], '?');
+
+
+// DELETE FROM COLLECTION
+// Remove comic ID from collectionContents array when 'Delete' icon clicked
+if (isset($_POST['delete'])) {
+  // Search collectionContents array for comic id - if found, unset that key
+  if (($key = array_search($_GET['removeID'], $_SESSION['collectionContents'])) !== false) {
+    unset($_SESSION['collectionContents'][$key]);
+  }
+
+  // If user logged in, serialize collectionContents array and store in DB
+  if (isset($_SESSION['currentUser'])) {
+    $contents = serialize($_SESSION['collectionContents']);
+    mysqli_query($connection, "UPDATE users SET collection='$contents' WHERE username='$_SESSION[currentUser]'");
+  }
+}
+
+-->
+
+{% extends 'base.html' %}
+
+{% block title %}My Collection{% endblock %}
+
+{% block content %}
+
+
+  <!-- Page Banner
+  ------------------------------------->
+  <div class="page-banner">
+    <!-- Page Banner BG Image Overlay -->
+    <div class="page-banner__bg-overlay"></div>
+
+    <!-- Page Banner Title -->
+    <h1 class="page-banner__title">My Collection</h1>
+  </div>
+
+
+
+
+
+  <!-- Page Content
+  ------------------------------------->
+  <section class="collection">
+    <div class="collection__container container">
+
+      <!-- Allows collection contents to overflow with scroll on mobile devices -->
+      <div class="collection__mobile-scroll-wrapper">
+
+        <!-- Table Headings -->
+        <div class="collection__headings">
+          <h4 class="collection__headings--cover">Cover</h4>
+          <h4 class="collection__headings--title">Title</h4>
+          <h4 class="collection__headings--author">Author</h4>
+          <h4 class="collection__headings--remove"></h4>
+        </div>
+
+
+        <!-- Collection Items (displayed dynamically) -->
+        <!--
+
+        // If collectionContents array not set or is empty, display 'Collection empty' message
+        if (!isset($_SESSION['collectionContents']) || empty($_SESSION['collectionContents'])) {
+          echo '<p class="collection__empty-alert">Your collection is empty</p>';
+        }
+        // If collectionContents array contains items, create and populate 'Collection Item' div for each
+        else {
+          // Get IDs from collectionContents array and extract results
+          foreach ($_SESSION['collectionContents'] as $id) {
+            $query = mysqli_query($connection, "SELECT * FROM books WHERE ID=$id");
+            $result = mysqli_fetch_array($query);
+            extract($result);
+
+        -->
+
+
+        <!-- Collection Item --><!-- SET $ID & COVER IMAGE & ALT TEXT & TITLE & AUTHOR -->
+        <div class="collection__item">
+
+          <!-- Cover Image -->
+          <a href="/comic-details?id=$id" class="collection__item--img-wrapper">
+            <img class="collection__item--img" src="{{ url_for('static', filename='images/uploads/the-martian.jpg') }}" alt="$title">
+          </a>
+
+          <!-- Book Title -->
+          <a href="/comic-details?id=$id" class="collection__item--title">$title</a>
+
+          <!-- Author -->
+          <p class="collection__item--author">$author</p>
+
+          <!-- Remove Icon -->
+          <form class="collection__item--remove" action="/collection?removeID=$id" method="POST">
+            <button name="delete" type="submit" class="collection__item--remove-icon"><i class="fas fa-trash-alt"></i></button>
+          </form>
+
+        </div>
+
+      </div>
+
+      <!-- Continue Browsing -->
+      <div class="collection__continue-browsing">
+        <a href="/comics" class="collection__button button--positive button--large">Continue Browsing</a>
+      </div>
+
+    </div>
+  </section>
+  
+
+
+
+
+  <!-- Back to Top Button
+  ------------------------------------->
+  <a href="#top" class="back-to-top-button" aria-label="Back to top button"><i class="fas fa-chevron-up back-to-top-button__arrow"></i></a>
+
+
+{% endblock %}
