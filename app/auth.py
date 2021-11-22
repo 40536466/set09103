@@ -1,16 +1,12 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 
 auth = Blueprint('auth', __name__)
 
 
-@auth.route('/login-register')
+# LOGIN/REGISTER PAGE
+@auth.route('/login-register', methods=['GET', 'POST'])
 def loginRegister():
-  return render_template('login_register.html')
-
-@auth.route('/login-request', methods=['GET', 'POST'])
-def loginRequest():
-  return render_template('login_register.html')
-
-@auth.route('/register-request', methods=['GET', 'POST'])
-def registerRequest():
-  return render_template('login_register.html')
+  return render_template('login_register.html',
+    section=request.args.get('section'),
+    error=request.args.get('error'))
+#include error arg in url if user data not found -> see html login form

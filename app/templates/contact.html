@@ -1,12 +1,3 @@
-<!--
-
-session_start();
-
-// Stores current URL minus arguments
-$_SESSION['redirect'] = strtok($_SERVER['REQUEST_URI'], '?');
-
--->
-
 
 {% extends 'base.html' %}
 
@@ -39,25 +30,21 @@ $_SESSION['redirect'] = strtok($_SERVER['REQUEST_URI'], '?');
         <h3 class="contact__heading">Get In Touch</h3>
         <p class="contact__text">If you would like to get in touch to request a new title or to submit a general inquiry, send us a message using the form below and we'll get back to you within 48 hours.</p>
 
-        <!-- PHP shows success confirmation when new book added -->
-        <!--
-
-        if (isset($_GET['success']) && $_GET['success'] == 'success') {
-          echo '<span class="contact__success">Message sent successfully</span>';
-        }
-
-        -->
+        <!-- Display success confirmation when message sent -->
+        {% if success == True %}
+          <span class="contact__success">Message sent successfully</span>
+        {% endif %}
 
         <!-- Form Component -->
-        <form class="contact__form form" action="/contact?success=success" method="POST">
+        <form class="contact__form form" action="/contact" method="POST">
 
           <!-- Name -->
           <label for="Name" class="form__label">Name</label>
-          <input name="Name" id="Name" type="text" class="form__text-input" maxlength="50" required>
+          <input name="name" id="name" type="text" class="form__text-input" maxlength="50" required>
   
           <!-- Email -->
           <label for="email" class="form__label">Email</label>
-          <input name="email" id="email" type="text" class="form__text-input" maxlength="50" required>
+          <input name="email" id="email" type="email" class="form__text-input" maxlength="50" required>
   
           <!-- Message -->
           <label for="message" class="form__label">Message</label>
