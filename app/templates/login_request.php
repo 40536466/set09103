@@ -1,18 +1,5 @@
 <?php
 
-session_start();
-
-
-// If previous URL not login_register.php, redirect to index.php
-if ($_SESSION['redirect'] != '/login_register.php') {
-  header("Location: index.php");
-  exit();
-}
-
-
-// Connection
-include 'connection.php';
-
 
 // Automatically login if $_SESSION['username'] is already set - i.e. if the user has just completed the registration form
 if (isset($_SESSION['username'])) {

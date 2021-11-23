@@ -39,7 +39,7 @@
 
         <!-- Form Component ('focus' class added depending on where the user came from) -->
         <div class="login-register__form-box {% if section == 'login' %}focus{% endif %}">
-          <form class="login-register-form form" action="/login-request" method="POST">
+          <form class="login-register-form form" action="/login-register?section=login" method="POST">
 
             <!-- Username (error displayed if user details not found in DB) -->
             <label for="login-username" class="form__label">Username</label>
@@ -68,7 +68,7 @@
 
         <!-- Form Component ('focus' class added depending on where the user came from) -->
         <div class="login-register__form-box {% if section == 'register' %}focus{% endif %}">
-          <form class="login-register-form form" action="/register-request" method="POST">
+          <form class="login-register-form form" action="/login-register?section=register" method="POST">
 
             <!-- Username -->
             <label for="register-username" class="form__label">Username <span class="subtle">(max. 20 characters)</span></label>
