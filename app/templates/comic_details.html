@@ -1,14 +1,5 @@
 <!--
 
-session_start();
-
-
-// Connection
-include 'connection.php';
-
-// Fetch collection contents
-include 'fetch_collection.php';
-
 
 // If user tries to access page without comic ID in URL, redirect to index.php
 if (!isset($_GET['id'])) {
@@ -18,9 +9,6 @@ if (!isset($_GET['id'])) {
  echo '</script>';
 }
 
-
-// Stores current URL minus arguments
-$_SESSION['redirect'] = strtok($_SERVER['REQUEST_URI'], '?');
 
 
 // ADD TO COLLECTION

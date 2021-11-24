@@ -9,7 +9,7 @@ def create_app():
   app = Flask(__name__)
   app.config['SECRET_KEY'] = 'afdgvbmdljadnsefnsdvdndhrtjhh'
   app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
-  app.config["SQLAlCHEMY_TRACK_MODIFICATIONS"] = False  # Handling Warnings
+  app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Handling Warnings
   db.init_app(app)
 
   from .views import views

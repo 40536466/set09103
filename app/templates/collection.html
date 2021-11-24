@@ -1,14 +1,5 @@
 <!--
 
-session_start();
-
-
-// Connection
-include 'connection.php';
-
-// Fetch collection contents
-include 'fetch_collection.php';
-
 
 // If user tries to access page without logging in, redirect to home.html
 if (!isset($_SESSION['currentUser'])) {
@@ -17,10 +8,6 @@ if (!isset($_SESSION['currentUser'])) {
   echo 'window.location.href = "/";';
   echo '</script>';
 }
-
-
-// Stores current URL minus arguments
-$_SESSION['redirect'] = strtok($_SERVER['REQUEST_URI'], '?');
 
 
 // DELETE FROM COLLECTION
