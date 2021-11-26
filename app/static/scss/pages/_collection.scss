@@ -54,7 +54,11 @@
       &:hover { text-decoration: underline; }
     }
 
-    &--author { width: 25%; }
+    &--author {
+      width: 25%;
+      text-decoration: none;
+      &:hover { text-decoration: underline; }
+    }
 
     &--remove {
       width: 15%;

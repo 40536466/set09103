@@ -1360,6 +1360,10 @@ h6 {
 }
 .collection__item--author {
   width: 25%;
+  text-decoration: none;
+}
+.collection__item--author:hover {
+  text-decoration: underline;
 }
 .collection__item--remove {
   width: 15%;

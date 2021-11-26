@@ -95,7 +95,7 @@ if (isset($_POST['delete'])) {
           <a href="/comic-details?id=$id" class="collection__item--title">$title</a>
 
           <!-- Author -->
-          <p class="collection__item--author">$author</p>
+          <a href="/comics?author=$author" class="collection__item--author">$author</a>
 
           <!-- Remove Icon -->
           <form class="collection__item--remove" action="/collection?removeID=$id" method="POST">

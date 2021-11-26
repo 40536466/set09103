@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, sessio
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
+from flask_login import login_user, login_required, logout_user, current_user
 
 auth = Blueprint('auth', __name__)
 
@@ -29,20 +30,22 @@ def loginRegister():
 
         # If password matches hash, log the user in
         if check_password_hash(user.password, password):
-          session['currentUser'] = username
+          login_user(user, remember=True)
           return redirect(url_for('views.home'))
 
         # If password does not match hash, return error
         else:
           return render_template('login_register.html',
             section='login',
-            error='user_details_not_found')
+            error='user_details_not_found',
+            user=current_user)
 
       # If username does not exist, return error
       else:
         return render_template('login_register.html',
           section='login',
-          error='user_details_not_found')
+          error='user_details_not_found',
+          user=current_user)
 
 
 
@@ -61,19 +64,21 @@ def loginRegister():
       if user:
         return render_template('login_register.html',
           section='register',
-          error='usernameError')
+          error='usernameError',
+          user=current_user)
 
       # If passwords do not match, return error
       if password != confirmPassword:
         return render_template('login_register.html',
           section='register',
-          error='passwordError')
+          error='passwordError',
+          user=current_user)
 
       # If all is good, register a new user
-      new_user = User(username=username, password=generate_password_hash(password, method='sha256'))
-      db.session.add(new_user)
+      user = User(username=username, password=generate_password_hash(password, method='sha256'))
+      db.session.add(user)
       db.session.commit()
-      session['currentUser'] = username
+      login_user(user, remember=True)
       return redirect(url_for('views.home'))
 
 
@@ -81,10 +86,16 @@ def loginRegister():
   # By default: render page template with args
   return render_template('login_register.html',
     section=request.args.get('section'),
-    error=request.args.get('error'))
+    error=request.args.get('error'),
+    user=current_user)
 
 
 
 
 
-# CREATE LOGOUT CODE!!!!!!!!
+# LOGOUT PAGE
+@auth.route('/logout')
+@login_required
+def logout():
+  logout_user()
+  return redirect(url_for('views.home'))

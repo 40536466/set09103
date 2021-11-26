@@ -54,7 +54,7 @@
         <li class="nav__item"><a href="/comics" class="nav__link">Comics</a></li>
         <li class="nav__item"><a href="/contact" class="nav__link">Contact</a></li>
         <!-- Show link to collection when user logged in -->
-        {% if session['currentUser'] is defined %}
+        {% if user.is_authenticated %}
           <li class="nav__item"><a href="/collection" class="nav__link">My Collection</a></li>
         {% endif %}
       </ul>
@@ -66,14 +66,14 @@
         <li>
           <ul class="nav__dropdown">
             <!-- Dropdown contents depend on if user is signed in -->
-            {% if session['currentUser'] is defined %}
-              <li class="nav__dropdown-item"><a class="nav__dropdown-link username"><strong>{{ session['currentUser'] }}</strong></a></li>
+            {% if user.is_authenticated %}
+              <li class="nav__dropdown-item"><a class="nav__dropdown-link username"><strong>{{ user.username }}</strong></a></li>
               <li class="hr"></li>
               <li class="nav__dropdown-item"><a href="/collection" class="nav__dropdown-link">My Collection</a></li>
               <li class="nav__dropdown-item"><a href="/logout" class="nav__dropdown-link warning">Logout</a></li>
             {% else %}
-              <li class="nav__dropdown-item"><a href="/login_register?section=login" class="nav__dropdown-link">Login</a></li>
-              <li class="nav__dropdown-item"><a href="/login_register?section=register" class="nav__dropdown-link">Create an Account</a></li>
+              <li class="nav__dropdown-item"><a href="/login-register?section=login" class="nav__dropdown-link">Login</a></li>
+              <li class="nav__dropdown-item"><a href="/login-register?section=register" class="nav__dropdown-link">Create an Account</a></li>
               <li class="hr"></li>
               <li class="nav__dropdown-item"><a class="nav__dropdown-link disabled">My Collection</a></li>
             {% endif %}
@@ -115,7 +115,7 @@
         <li class="footer__item"><a href="/comics" class="footer__link">Comics</a></li>
         <li class="footer__item"><a href="/contact" class="footer__link">Contact</a></li>
         <!-- Show link to collection when user logged in -->
-        {% if session['currentUser'] is defined %}
+        {% if user.is_authenticated %}
           <li class="footer__item"><a href="/collection" class="footer__link">My Collection</a></li>
         {% endif %}
       </ul>
