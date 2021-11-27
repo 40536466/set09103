@@ -83,6 +83,10 @@ if (isset($_POST['delete'])) {
         -->
 
 
+
+        {# for comic in user.collection {{ comic.data }} endfor #}
+
+        {#
         <!-- Collection Item --><!-- SET $ID & COVER IMAGE & ALT TEXT & TITLE & AUTHOR -->
         <div class="collection__item">
 
@@ -103,6 +107,9 @@ if (isset($_POST['delete'])) {
           </form>
 
         </div>
+        #}
+
+        {# <p class="collection__empty-alert">Your collection is empty</p> #}
 
       </div>
 

@@ -42,34 +42,20 @@
       <!-- Book Grid -->
       <div class="featured__book-grid book-grid">
 
-
-        <!-- Individual book tiles created dynamically -->
-        <!--
-
-          // Get featured books from DB
-          $query = mysqli_query($connection, "SELECT * FROM books WHERE featured='featured' ORDER BY author");
-
-          // Create book tiles for each title found
-          while ($row = mysqli_fetch_array($query)) {
-            extract($row);
-
-            // Replace space in author name with underscore for use in URL
-            $authorURL = str_replace(" ", "_", $author);
-
-        -->
-
-        <!-- Book Grid Item --><!-- SET $ID & COVER IMAGE & ALT TEXT & TITLE & AUTHOR & AUTHOR URL-->
-        <div class="book-grid__item">
-          <a href="/comic-details?id=$ID" class="book-grid__link">
-            <img class="book-grid__img" src="{{ url_for('static', filename='images/uploads/the-martian.jpg') }}" alt="$title">
-            <h4 class="book-grid__title">$title</h4>
-          </a>
-          <div class="book-grid__flex-wrapper">
-            <a href="/comics?author=$authorURL" class="book-grid__link">
-              <h5 class="book-grid__author">$author</h5>
-            <a>
+        {% for comic in featuredComics %}
+          <!-- Book Grid Item -->
+          <div class="book-grid__item">
+            <a href="/comic-details?id={{ comic.id }}" class="book-grid__link">
+              <img class="book-grid__img" src="{{ url_for('static', filename=comic.coverImage) }}" alt="{{ comic.title }}">
+              <h4 class="book-grid__title">{{ comic.title }}</h4>
+            </a>
+            <div class="book-grid__flex-wrapper">
+              <a href="/comics?author={{ comic.author|replace(' ', '_') }}" class="book-grid__link">
+                <h5 class="book-grid__author">{{ comic.author }}</h5>
+              <a>
+            </div>
           </div>
-        </div>
+        {% endfor %}
 
       </div>
 

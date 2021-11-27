@@ -1,34 +1,3 @@
-<!--
-
-
-// Declare search term and category variables
-$searchTerm = '';
-$category = '';
-
-
-// Store search term from search bar, if set
-if (isset($_POST['search'])) {
-  // Replace apostrophe in string to avoid SQL errors
-  $searchTerm = str_replace("'", "&#39;", $_POST['searchTerm']);
-}
-
-
-// Store author's name, if set (will overwrite searchTerm above) -> convert underscores to spaces
-if (isset($_GET['author'])) {
-  $searchTerm = str_replace("_", " ", $_GET['author']);
-}
-
-
-// Store selected category, if set -> convert underscores to spaces
-if (isset($_GET['category'])) {
-  $category = str_replace("_", " ", $_GET['category']);
-
-  // Special case for 'Food & Drink' -> add ampersand back into string
-  if ($category === 'Food Drink') { $category = 'Food & Drink'; }
-}
-
--->
-
 
 {% extends 'base.html' %}
 
@@ -100,7 +69,6 @@ if (isset($_GET['category'])) {
     </div>
 
 
-    <!-- Sidebar & Book Grid -->
     <div class="comics__container--align-top container">
 
       <!-- Categories Sidebar --><!-- MAYBE CREATE ARRAY OF CATEGORIES TO THEN CREATE THIS SECTION DYNAMICALLY -->
@@ -181,52 +149,24 @@ if (isset($_GET['category'])) {
       <div class="comics__column--wide">
         <div class="comics__book-grid book-grid">
 
-          <!-- Individual comics created dynamically -->
-          <!--
-
-            // If search term is not set, fetch all comics
-            if ($searchTerm == '') {
-              $query = mysqli_query($connection, "SELECT * FROM books ORDER BY author");
-            }
-            // If search term is set, fetch only relevant comics
-            elseif ($searchTerm != '') {
-              $query = mysqli_query($connection, "SELECT * FROM books WHERE title LIKE '%$searchTerm%' OR author LIKE '%$searchTerm%' ORDER BY author");
-            }
-
-
-            // If category is set, fetch only comics from that category
-            if ($category != '') {
-              $query = mysqli_query($connection, "SELECT * FROM books WHERE category='$category' ORDER BY author");
-            }
-
-
-            // Echo apology if no comics found
-            if (mysqli_num_rows($query) == 0) {
-              echo "<p class='book-grid__no-results'>No comics found - please check back again soon.</p>";
-            }
-
-
-            // Create comic tiles for each title found
-            while ($row = mysqli_fetch_array($query)) {
-              extract($row);
-
-              // Replace space in author name with underscore for use in URL
-              $authorURL = str_replace(" ", "_", $author);
-
-          -->
-
-          <!-- Book Grid Item --><!-- SET $ID & COVER IMAGE & ALT TEXT & TITLE & AUTHOR & AUTHOR URL-->
-          <div class="book-grid__item">
-            <a href="/comic-details?id=$ID" class="book-grid__link">
-              <img class="book-grid__img" src="{{ url_for('static', filename='images/uploads/the-martian.jpg') }}" alt="$title">
-              <h4 class="book-grid__title">$title</h4>
-            </a>
-            <div class="book-grid__flex-wrapper">
-              <a href="/comics?author=$authorURL" class="book-grid__link">
-                <h5 class="book-grid__author">$author</h5>
+          {% if comics == [] %}
+            <p class='book-grid__no-results'>No comics found - please check back again soon.</p>
+          {% else %}
+            {% for comic in comics %}
+            <!-- Book Grid Item -->
+            <div class="book-grid__item">
+              <a href="/comic-details?id={{ comic.id }}" class="book-grid__link">
+                <img class="book-grid__img" src="{{ url_for('static', filename=comic.coverImage) }}" alt="{{ comic.title }}">
+                <h4 class="book-grid__title">{{ comic.title }}</h4>
               </a>
+              <div class="book-grid__flex-wrapper">
+                <a href="/comics?author={{ comic.author|replace(' ', '_') }}" class="book-grid__link">
+                  <h5 class="book-grid__author">{{ comic.author }}</h5>
+                <a>
+              </div>
             </div>
-          </div>
+          {% endfor %}
+        {% endif %}
         
         </div>
       </div>
