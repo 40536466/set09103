@@ -14,20 +14,11 @@
 
     <!-- Page Banner Title -->
     <!-- Title changes dynamically based on category selected by user -->
-    <!--
-
-      // If category is set, set heading equal to category
-      if ($category != '') {
-        echo "<h1 class='page-banner__title'>$category</h1>";
-      }
-      // If category is not set, set heading equal to 'All Books'
-      elseif ($category == '') {
-        echo "<h1 class='page-banner__title'>All Books</h1>";
-      }
-
-    -->
-
-    <h1 class="page-banner__title">All Books</h1>
+    {% if category == '' %}
+      <h1 class="page-banner__title">All Comics</h1>
+    {% else %}
+      <h1 class='page-banner__title'>{{ category }}</h1>
+    {% endif %}
   </div>
   
   
@@ -71,76 +62,22 @@
 
     <div class="comics__container--align-top container">
 
-      <!-- Categories Sidebar --><!-- MAYBE CREATE ARRAY OF CATEGORIES TO THEN CREATE THIS SECTION DYNAMICALLY -->
+
+      <!-- Categories Sidebar -->
       <div class="comics__column--narrow">
         <div class="comics__categories-list">
-          <!-- Category Item -->
+          <!-- Category - All Books -->
           <a href="/comics" class="comics__category-item"> 
             <p class="comics__category-name">All Comics</p>
-            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books")) -->
-            <p class="comics__category-number">($#)</p>
           </a>
-          <!-- Category Item -->
-          <a href="/comics?category=Adventure" class="comics__category-item">
-            <p class="comics__category-name">Adventure</p>
-            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Adventure'")) -->
-            <p class="comics__category-number">($#)</p>
-          </a>
-          <!-- Category Item -->
-          <a href="/comics?category=Animals" class="comics__category-item">
-            <p class="comics__category-name">Animals</p>
-            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Animals'")) -->
-            <p class="comics__category-number">($#)</p>
-          </a>
-          <!-- Category Item -->
-          <a href="/comics?category=Art" class="comics__category-item">
-            <p class="comics__category-name">Art</p>
-            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Art'")) -->
-            <p class="comics__category-number">($#)</p>
-          </a>
-          <!-- Category Item -->
-          <a href="/comics?category=Biographies" class="comics__category-item">
-            <p class="comics__category-name">Biographies</p>
-            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Biographies'")) -->
-            <p class="comics__category-number">($#)</p>
-          </a>
-          <!-- Category Item -->
-          <a href="/comics?category=Business" class="comics__category-item">
-            <p class="comics__category-name">Business</p>
-            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Business'")) -->
-            <p class="comics__category-number">($#)</p>
-          </a>
-          <!-- Category Item -->
-          <!-- Categories with apostrophies should have the apostrophies removed before being used to search the DB, hence '?category=Childrens' in href -->
-          <a href="/comics?category=Childrens" class="comics__category-item">
-            <p class="comics__category-name">Children's</p>
-            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Childrens'")) -->
-            <p class="comics__category-number">($#)</p>
-          </a>
-          <!-- Category Item -->
-          <a href="/comics?category=Classics" class="comics__category-item">
-            <p class="comics__category-name">Classics</p>
-            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Classics'")) -->
-            <p class="comics__category-number">($#)</p>
-          </a>
-          <!-- Category Item -->
-          <a href="/comics?category=Crime" class="comics__category-item">
-            <p class="comics__category-name">Crime</p>
-            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Crime'")) -->
-            <p class="comics__category-number">($#)</p>
-          </a>
-          <!-- Category Item -->
-          <a href="/comics?category=Computing" class="comics__category-item">
-            <p class="comics__category-name">Computing</p>
-            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Computing'")) -->
-            <p class="comics__category-number">($#)</p>
-          </a>
-          <!-- Category Item -->
-          <a href="/comics?category=Education" class="comics__category-item">
-            <p class="comics__category-name">Education</p>
-            <!-- $numberOfComics = mysqli_num_rows(mysqli_query($connection, "SELECT * FROM books WHERE category='Education'")) -->
-            <p class="comics__category-number">($#)</p>
-          </a>
+
+          {% for category in availableCategories|sort(case_sensitive=False) %}
+            <!-- Category -->
+            <a href="/comics?category={{ category|replace(' ', '_') }}" class="comics__category-item">
+              <p class="comics__category-name">{{ category }}</p>
+            </a>
+          {% endfor %}
+
         </div>
       </div>
 

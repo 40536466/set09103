@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
+from sqlalchemy import or_
 from .models import Comic
 
 views = Blueprint('views', __name__)
@@ -52,37 +53,42 @@ def comics():
   category = ''
   comics = Comic.query.all()
 
-
-
-  # if method = post
-  # searchTerm = value from search bar
-
-  # if get author's name exists
-  # searchTerm = author's name -> convert underscores to spaces
-
-  # if get category exists
-  # category = category -> convert underscores to spaces
-
-
-  # If search term != '', fetch only relevant comics
-    # set comics = query.filter(title like searchterm or author like searchterm)
-
-  # If category != '', fetch only comics from that category
-    # set comics = query.filter(category = category)
+  # Get all available categories from comics in the database
+  query = Comic.query.with_entities(Comic.category).distinct().all()
+  availableCategories = [item[0] for item in query]
   
+  # If a search is submitted ...
+  if request.method == 'POST':
+    searchTerm = request.form.get('searchTerm')
 
-  # Sample code for comics query
-  # comics = Comic.query.filter(
-    # or_(
-      # title.like('%' + searchTerm + '%'),
-      # author.like('%' + searchTerm + '%')
-    # )
-  # )
+  # If an author's name has been clicked ...
+  if request.args.get('author') != None:
+    searchTerm = request.args.get('author').replace('_', ' ')
 
-  
+  # If searchTerm has been set, get related comics from DB
+  if searchTerm != '':
+    search = "%{}%".format(searchTerm)
+    comics = Comic.query.filter(
+      or_(
+        Comic.title.like(search),
+        Comic.author.like(search)
+      )
+    ).all()
+
+
+
+  # If a category has been clicked, get related comics from DB
+  if request.args.get('category') != None:
+    category = request.args.get('category').replace('_', ' ')
+    comics = Comic.query.filter_by(category=category).all()
+
+
 
   return render_template('comics.html',
     user=current_user,
+    searchTerm=searchTerm,
+    category=category,
+    availableCategories=availableCategories,
     comics=comics)
 
 
