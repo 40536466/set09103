@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request
 from flask_login import login_required, current_user
 from sqlalchemy import or_
 from .models import Comic
+from . import db
 
 views = Blueprint('views', __name__)
 
@@ -38,8 +39,35 @@ def myCollection():
 @views.route('/comic-details', methods=['GET', 'POST'])
 def comicDetails():
 
+  # If no id passed in URL, redirect to comics page
+  if request.args.get('id') == None:
+    return redirect(url_for('views.comics'))
+  
+  # If id exists, get comic from DB
+  else:
+    comic = Comic.query.filter_by(id=request.args.get('id')).first()
+
+
+  # Get all available categories from comics in the database
+  query = Comic.query.with_entities(Comic.category).distinct().all()
+  availableCategories = [item[0] for item in query]
+
+
+  # Get other comics by same author
+  featuredComics = Comic.query.filter_by(author=comic.author).all()
+
+
+  # If user clicks 'Add to Collection' button ...
+  if request.method == 'POST':
+    current_user.collection += str(comic.id)
+    db.session.commit()
+
+
   return render_template('comic_details.html',
-    user=current_user)
+    user=current_user,
+    comic=comic,
+    featuredComics=featuredComics,
+    availableCategories=availableCategories)
 
 
 
@@ -76,12 +104,10 @@ def comics():
     ).all()
 
 
-
   # If a category has been clicked, get related comics from DB
   if request.args.get('category') != None:
     category = request.args.get('category').replace('_', ' ')
     comics = Comic.query.filter_by(category=category).all()
-
 
 
   return render_template('comics.html',
