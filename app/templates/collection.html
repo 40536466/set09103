@@ -1,31 +1,3 @@
-<!--
-
-
-// If user tries to access page without logging in, redirect to home.html
-if (!isset($_SESSION['currentUser'])) {
-  echo '<script type="text/javascript">'; 
-  echo 'alert("You must be logged in to view this page.");';
-  echo 'window.location.href = "/";';
-  echo '</script>';
-}
-
-
-// DELETE FROM COLLECTION
-// Remove comic ID from collectionContents array when 'Delete' icon clicked
-if (isset($_POST['delete'])) {
-  // Search collectionContents array for comic id - if found, unset that key
-  if (($key = array_search($_GET['removeID'], $_SESSION['collectionContents'])) !== false) {
-    unset($_SESSION['collectionContents'][$key]);
-  }
-
-  // If user logged in, serialize collectionContents array and store in DB
-  if (isset($_SESSION['currentUser'])) {
-    $contents = serialize($_SESSION['collectionContents']);
-    mysqli_query($connection, "UPDATE users SET collection='$contents' WHERE username='$_SESSION[currentUser]'");
-  }
-}
-
--->
 
 {% extends 'base.html' %}
 
@@ -66,50 +38,39 @@ if (isset($_POST['delete'])) {
 
 
         <!-- Collection Items (displayed dynamically) -->
-        <!--
 
-        // If collectionContents array not set or is empty, display 'Collection empty' message
-        if (!isset($_SESSION['collectionContents']) || empty($_SESSION['collectionContents'])) {
-          echo '<p class="collection__empty-alert">Your collection is empty</p>';
-        }
-        // If collectionContents array contains items, create and populate 'Collection Item' div for each
-        else {
-          // Get IDs from collectionContents array and extract results
-          foreach ($_SESSION['collectionContents'] as $id) {
-            $query = mysqli_query($connection, "SELECT * FROM books WHERE ID=$id");
-            $result = mysqli_fetch_array($query);
-            extract($result);
+        <!-- If user collection is empty, print notice -->
+        {% if not user.collection %}
+          <p class="collection__empty-alert">Your collection is empty</p>
 
-        -->
+        <!-- If user collection has items ... -->
+        {% else %}
+          <!-- For each comic in the list, display it if its id is in the list -->
+          {% for comic in comics %}
+            {% if comic.id|string in user.collection %}
+              <!-- Collection Item -->
+              <div class="collection__item">
 
+                <!-- Cover Image -->
+                <a href="/comic-details?id={{ comic.id }}" class="collection__item--img-wrapper">
+                  <img class="collection__item--img" src="{{ url_for('static', filename=comic.coverImage) }}" alt="{{ comic.title }}">
+                </a>
 
+                <!-- Comic Title -->
+                <a href="/comic-details?id={{ comic.id }}" class="collection__item--title">{{ comic.title }}</a>
 
-        {# for comic in user.collection {{ comic.data }} endfor #}
+                <!-- Author -->
+                <a href="/comics?author={{ comic.author|replace(' ', '_') }}" class="collection__item--author">{{ comic.author }}</a>
 
-        {#
-        <!-- Collection Item --><!-- SET $ID & COVER IMAGE & ALT TEXT & TITLE & AUTHOR -->
-        <div class="collection__item">
+                <!-- Remove Icon -->
+                <form class="collection__item--remove" action="/collection?removeID={{ comic.id }}" method="POST">
+                  <button name="delete" type="submit" class="collection__item--remove-icon"><i class="fas fa-trash-alt"></i></button>
+                </form>
 
-          <!-- Cover Image -->
-          <a href="/comic-details?id=$id" class="collection__item--img-wrapper">
-            <img class="collection__item--img" src="{{ url_for('static', filename='images/uploads/the-martian.jpg') }}" alt="$title">
-          </a>
-
-          <!-- Book Title -->
-          <a href="/comic-details?id=$id" class="collection__item--title">$title</a>
-
-          <!-- Author -->
-          <a href="/comics?author=$author" class="collection__item--author">$author</a>
-
-          <!-- Remove Icon -->
-          <form class="collection__item--remove" action="/collection?removeID=$id" method="POST">
-            <button name="delete" type="submit" class="collection__item--remove-icon"><i class="fas fa-trash-alt"></i></button>
-          </form>
-
-        </div>
-        #}
-
-        {# <p class="collection__empty-alert">Your collection is empty</p> #}
+              </div>
+            {% endif %}
+          {% endfor %}          
+        {% endif %}
 
       </div>
 

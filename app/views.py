@@ -27,9 +27,19 @@ def home():
 @views.route('/collection', methods=['GET', 'POST'])
 @login_required
 def myCollection():
+  comics = Comic.query.all()
+
+
+  # If user clicks 'Delete' button ...
+  if request.method == 'POST':
+    removeID = str(request.args.get('removeID'))
+    current_user.collection = current_user.collection.replace(removeID, '')
+    db.session.commit()
+
 
   return render_template('collection.html',
-    user=current_user)
+    user=current_user,
+    comics=comics)
 
 
 
