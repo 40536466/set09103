@@ -75,7 +75,7 @@ def loginRegister():
           user=current_user)
 
       # If all is good, register a new user
-      user = User(username=username, password=generate_password_hash(password, method='sha256'))
+      user = User(username=username, password=generate_password_hash(password, method='sha256'), collection='')
       db.session.add(user)
       db.session.commit()
       login_user(user, remember=True)
